@@ -6,10 +6,24 @@ ask.onclick = function () {
 const btn = document.getElementById('push');
 
 btn.onclick = function() {
-  let noti = new Notification("test2",{
-    body: "Hello world",
-    requireInteraction: true
-  });
+  let i = 0;
+  //let interval = window.setInterval(function() {
+  //  let n = new Notification("Hello world notification", {
+  //    body: "test multiple notification: " + i++,
+  //    tag: 'myNotiTag',
+  //    renotify: true,
+  //    requireInteraction: true
+  //  });
+
+  //  n.onclick = function() {
+  //    window.clearInterval(interval);
+  //    n.close();
+  //  }
+  //}, 1000);
+
+    window.setInterval(function() {
+      alert("This is an alert!");
+    }, 3000);
 }
 
 function pushAsk() {

@@ -1,16 +1,61 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Periodic Timer</title>
-  <link rel="stylesheet" href="css/styles.css">
-</head>
+	<head>
+  		<meta charset="utf-8">
+  		<title>Reminder</title>
+  		<link rel="stylesheet" href="style.css">
+	</head>
 
-<body>
-	<button id="ask">Ask</button>
-	<button id="push">Push</button>
-  <script src="script.js"></script>
-</body>
+	<body>
+		<form id="cfg">
+			<div>
+				<label for="cfg_time">Countdown length (seconds): </label>
+				<input type="text" id="cfg_time"
+								   minlength="1" maxlength="5" size="3" value="3600"
+																		pattern="[0-9]+">
+			</div>
+			<div>
+				<input type="checkbox" id="cfg_alert" name="cfg_alert" checked>
+				<label for="cfg_alert">Alert</label>
+
+				<input type="checkbox" id="cfg_notification" name="cfg_notification">
+				<label for="cfg_notification">Notification</label>
+
+				<input type="checkbox" id="cfg_title" name="cfg_title">
+				<label for="cfg_title">Title</label>
+
+				<input type="checkbox" id="cfg_sound" name="cfg_sound">
+				<label for="cfg_sound">Sound</label>
+
+			</div>
+			<div>
+				<label for="cfg_msg">Message: </label>
+				<input type="text" id="cfg_msg" value="Time's up!">
+			</div>
+			<div>
+				<h2>Notification Settings</h2>
+				<fieldset id="cfg_notifications">
+					<input type="checkbox" id="cfg_ninteract" 
+										   name="cfg_ninteract" checked>
+					<label for="cfg_ninteract">Require Interaction</label>
+
+					<input type="checkbox" id="cfg_nsilent" 
+										   name="cfg_nsilent">
+					<label for="cfg_nsilent">Silent</label>
+
+					<input type="checkbox" id="cfg_nrenotify" 
+										   name="cfg_nrenotify">
+					<label for="cfg_nrenotify">Renotify</label>
+				</fieldset>
+			</div>
+
+			<button type="button" id="btn_test">Test</button> <span id="countdown_test">3</span>
+		</form>
+		<div>
+			<button type="button" id="btn_countdown">Start</button> <span id="countdown"></span>
+		</div>
+		<script src="js/main.js" type="module"></script>
+	</body>
 </html>
 

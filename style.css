@@ -1,0 +1,22 @@
+html { height: 100%; }
+body {
+	display: grid;
+	height: 100%;
+	grid-template-columns: auto auto;
+	grid-template-rows: auto auto;
+}
+
+#settings {
+	grid-row: 1 / 2;
+	grid-column: 2;
+}
+
+#countdown {
+	grid-row: 1;
+	grid-column: 1;
+}
+
+#break {
+	grid-row: 2;
+	grid-column: 1;
+}

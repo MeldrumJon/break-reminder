@@ -7,53 +7,70 @@
   		<link rel="stylesheet" href="style.css">
 	</head>
 
-	<body>
-		<form id="cfg">
-			<div>
-				<label for="cfg_time">Countdown length (seconds): </label>
-				<input type="text" id="cfg_time"
-								   minlength="1" maxlength="5" size="3" value="3600"
-																		pattern="[0-9]+">
+	<body id="reminder">
+		<div id="countdown">
+			<div id="control">
+				<div>
+					<div>
+						<a href="#" id="cfg_open">Settings</a>
+						<span id="counter"></span>
+					</div>
+					<button type="button" id="btn_countdown">Start</button> 
+				</div>
 			</div>
-			<div>
-				<input type="checkbox" id="cfg_alert" name="cfg_alert" checked>
-				<label for="cfg_alert">Alert</label>
-
-				<input type="checkbox" id="cfg_notification" name="cfg_notification">
-				<label for="cfg_notification">Notification</label>
-
-				<input type="checkbox" id="cfg_title" name="cfg_title">
-				<label for="cfg_title">Title</label>
-
-				<input type="checkbox" id="cfg_sound" name="cfg_sound">
-				<label for="cfg_sound">Sound</label>
-
+			<div id="user">
+				User content.
 			</div>
-			<div>
-				<label for="cfg_msg">Message: </label>
-				<input type="text" id="cfg_msg" value="Time's up!">
-			</div>
-			<div>
-				<h2>Notification Settings</h2>
+		</div>
+		<div id="settings">
+			<form id="cfg">
+				<a href="#" id="cfg_close">Close</a>
+				<fieldset>
+					<legend>Countdown</legend>
+					<label for="cfg_time">Countdown length (seconds): </label>
+					<input type="text" id="cfg_time"
+								   	minlength="1" maxlength="5" size="3" value="3600"
+																			pattern="[0-9]+">
+					<br/>
+					<textarea id="cfg_user">Click the settings icon to change this.</textarea>
+				</fieldset>
+				<fieldset>
+					<legend>Alarm</legend>
+					<input type="checkbox" id="cfg_alert" name="cfg_alert">
+					<label for="cfg_alert">Browser Alert</label>
+
+					<input type="checkbox" id="cfg_notification" name="cfg_notification" checked>
+					<label for="cfg_notification">Push Notification</label>
+
+					<input type="checkbox" id="cfg_title" name="cfg_title">
+					<label for="cfg_title">Flash Page Title</label>
+
+					<input type="checkbox" id="cfg_sound" name="cfg_sound">
+					<label for="cfg_sound">Sound</label>
+
+					<br/>
+					<div>
+						<label for="cfg_msg">Message: </label>
+						<input type="text" id="cfg_msg" value="Time's up!">
+					</div>
+				</fieldset>
 				<fieldset id="cfg_notifications">
+					<legend>Notifications</legend>
 					<input type="checkbox" id="cfg_ninteract" 
-										   name="cfg_ninteract" checked>
+										name="cfg_ninteract" checked>
 					<label for="cfg_ninteract">Require Interaction</label>
 
 					<input type="checkbox" id="cfg_nsilent" 
-										   name="cfg_nsilent">
+										name="cfg_nsilent">
 					<label for="cfg_nsilent">Silent</label>
 
 					<input type="checkbox" id="cfg_nrenotify" 
-										   name="cfg_nrenotify">
+										name="cfg_nrenotify">
 					<label for="cfg_nrenotify">Renotify</label>
 				</fieldset>
-			</div>
 
-			<button type="button" id="btn_test">Test</button> <span id="countdown_test">3</span>
-		</form>
-		<div>
-			<button type="button" id="btn_countdown">Start</button> <span id="countdown"></span>
+				<button type="button" id="btn_test">Test</button> <span id="counter_test">3</span>
+			</form>
 		</div>
 		<script src="js/main.js" type="module"></script>
 	</body>

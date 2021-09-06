@@ -21,9 +21,11 @@ export default class Config {
         this._prefix = prefix;
         if (localStorage.getItem(formId) !== null) {
             this.restore();
+            this._init = false;
         }
         else {
             this.save();
+            this._init = true;
         }
     }
 
@@ -65,8 +67,6 @@ export default class Config {
         }
         recurse(document.getElementById(this._formId), this, this._prefix);
         localStorage.setItem(this._formId, JSON.stringify(this));
-        console.log('saved: ', this);
-        console.log('ls: ', localStorage.getItem(this._formId));
     }
 
     restore() {

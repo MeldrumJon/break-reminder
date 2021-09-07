@@ -5,12 +5,14 @@
 html { height: 100%; }
 body {
 	height: 100%;
-	background: #f1f3f4;
 	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
+	background: #f1f3f4;
+	font-size: 1em;
+	font-family: Arial, sans-serif;
 }
 button {
 	background-image: linear-gradient(to bottom, #467DAA, #446DA8);
@@ -40,11 +42,10 @@ button:active {
 }
 #control {
 	background: #fff;
-	padding: 0 5em;
+	padding: 1em;
+	border-bottom: 1px solid #dddee2;
 }
 #control > div {
-	padding: 1em 0;
-	border-bottom: 1px solid black;
 }
 #cfg_open {
 	display:inline-block;
@@ -57,9 +58,10 @@ button:active {
 	font-size: 3em;
 }
 #user {
+	padding: 1em;
 }
 
-#settings {
+#shade {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -69,14 +71,22 @@ button:active {
 	justify-content: center;
 	align-items: center;
 	z-index: 100;
-	background: #efef5b;
+	background: #00000033;
 	/* Hidden normally */
 	visibility: hidden;
 	opacity: 0;
-	transition: all linear 0.5s;
 }
-body.settings #settings {
+body.settings #shade {
 	visibility: visible;
-	transition: all linear 0.5s;
 	opacity: 1;
+}
+
+#cfg {
+	background: #fff;
+	border: 1px solid #dddee2;
+	padding: 1em;
+	border-radius: 15px;
+}
+fieldset {
+	margin: 1em 0;
 }

@@ -5,7 +5,7 @@
 html { height: 100%; }
 body {
 	height: 100%;
-	background: #f0efea;
+	background: #f1f3f4;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -13,16 +13,21 @@ body {
 	left: 0;
 }
 button {
-	background: #dfa633;
-	border:none;
-	font-size: 0.8em;
+	background-image: linear-gradient(to bottom, #467DAA, #446DA8);
+	border:1px solid #42688b;
+	color: #fff;
+	border-radius: 5px;
+	font-size: 0.9em;
 	font-weight: 700;
 	padding: 0 1em;
 	line-height: 2em;
 }
 button:hover {
-	background: #b08327;
 	cursor:pointer;
+	border-color: #6193DA;
+}
+button:active {
+	background: #6193DA;
 }
 
 #countdown {
@@ -34,6 +39,7 @@ button:hover {
 	text-align: center;
 }
 #control {
+	background: #fff;
 	padding: 0 5em;
 }
 #control > div {
@@ -51,10 +57,6 @@ button:hover {
 	font-size: 3em;
 }
 #user {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 #settings {

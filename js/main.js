@@ -1,6 +1,10 @@
 import Config from './Config.js';
 import * as noti from './noti.js';
 
+function s2mmss(seconds) {
+    return '' + Math.floor(seconds/60) + 'm ' + (seconds % 60) + 's';
+}
+
 /*
  * Config
  */
@@ -43,11 +47,12 @@ dom_cfg_time.addEventListener('change', function() {
         dom_counter.innerHTML = '' + dom_cfg_time.value;
     }
 });
-dom_counter.innerHTML = '' + cfg.time;
+dom_counter.innerHTML = s2mmss(cfg.time);
 
 // Add user content
 const dom_user = document.getElementById('user');
 const dom_cfg_user = document.getElementById('cfg_user');
+dom_user.innerHTML = dom_cfg_user.value;
 dom_cfg_user.addEventListener('change', function() {
     dom_user.innerHTML = dom_cfg_user.value;
 });
@@ -115,7 +120,7 @@ dom_btn_test.onclick = function() {
             notify();
         }
         else {
-            dom_test_counter.innerHTML = '' + remaining;
+            dom_test_counter.innerHTML = s2mmss(remaining);
         }
     }
     update();
@@ -137,7 +142,7 @@ dom_btn_countdown.onclick = function() {
         if (remaining == -1) {
             notify();
         }
-        dom_counter.innerHTML = '' + remaining;
+        dom_counter.innerHTML = s2mmss(remaining);
     }
     update();
     count_intervalID = window.setInterval(update, 1000);

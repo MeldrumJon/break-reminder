@@ -72,7 +72,6 @@ export default class Config {
     restore() {
         let cfg = JSON.parse(localStorage.getItem(this._formId));
         Object.assign(this, cfg);
-        console.log('restoring: ', this);
         function recurse(dom_parent, cfg_obj, prefix) {
             for (let i = 0; i < dom_parent.children.length; ++i) {
                 let ch = dom_parent.children[i];
@@ -84,19 +83,18 @@ export default class Config {
                     case "INPUT":
                         switch (ch.getAttribute('type')) {
                             case "text":
-                                cfg_obj[ch_key] = ch.value;
+                                ch.value = cfg_obj[ch_key];
                                 break;
                             case "checkbox":
-                                cfg_obj[ch_key] = ch.checked;
+                                ch.checked = cfg_obj[ch_key];
                                 break;
                         }
                         break;
                     case "TEXTAREA":
-                        cfg_obj[ch_key] = ch.value;
+                        ch.value = cfg_obj[ch_key];
                         break;
                     case "FIELDSET":
                         if (ch_key) {
-                            cfg_obj[ch_key] = {};
                             recurse(ch, cfg_obj[ch_key], prefix);
                         }
                         else {

@@ -2,6 +2,9 @@ import Config from './Config.js';
 import * as noti from './noti.js';
 
 function s2mmss(seconds) {
+    if (seconds < 0) {
+        return '- ' + Math.floor(-seconds/60) + 'm ' + (-seconds % 60) + 's';
+    }
     return '' + Math.floor(seconds/60) + 'm ' + (seconds % 60) + 's';
 }
 
@@ -43,8 +46,8 @@ else if (noti.push_status() !== "granted") {
 const dom_counter = document.getElementById('counter');
 const dom_cfg_time = document.getElementById('cfg_time');
 dom_cfg_time.addEventListener('change', function() {
-    if (!count_intervalID) { // Countdown not active
-        dom_counter.innerHTML = '' + dom_cfg_time.value;
+    if (!intervalID) { // Countdown not active
+        dom_counter.innerHTML = s2mmss(dom_cfg_time.value);
     }
 });
 dom_counter.innerHTML = s2mmss(cfg.time);
@@ -96,54 +99,56 @@ function notify() {
     if (cfg.title) {
         noti.title(cfg.msg);
     }
-    //if (cfg.sound) {
-    //}
     if (cfg.alert) { // Last since it is blocking
         noti.alert(cfg.msg);
     }
 }
 
-// Test Button
-const dom_btn_test = document.getElementById('btn_test');
-const dom_test_counter = document.getElementById('counter_test');
-const test_length = parseInt(dom_test_counter.innerHTML);
-let test_intervalID = null;
-dom_btn_test.onclick = function() {
-    if (test_intervalID) { return; }
-    let remaining = test_length;
+function countdown(seconds, dom_countdown) {
+    let target = new Date(Date.now() + 1000*seconds);
+    let notified = 0;
+
     function update() {
-        --remaining;
-        if (remaining < 0) {
-            window.clearInterval(test_intervalID);
-            test_intervalID = null;
-            dom_test_counter.innerHTML = '' + test_length;
+        let difference = target.getTime() - Date.now();
+        dom_countdown.innerHTML = s2mmss(Math.floor((difference-1)/1000));
+        if (!notified && difference < 0) {
+            notified = 1;
             notify();
-        }
-        else {
-            dom_test_counter.innerHTML = s2mmss(remaining);
         }
     }
     update();
-    test_intervalID = window.setInterval(update, 1000);
+    return window.setInterval(update, 1000);
+}
+
+// Test Button
+const test_length = 3;
+const dom_btn_test = document.getElementById('btn_test');
+const dom_counter_test = document.getElementById('counter_test');
+dom_counter_test.innerHTML = s2mmss(test_length);
+
+let test_intervalID = null;
+
+dom_btn_test.onclick = function() {
+    if (test_intervalID) { // Restart
+        window.clearInterval(test_intervalID);
+        test_intervalID = null;
+    }
+    test_intervalID = countdown(test_length, dom_counter_test);
 }
 
 // Real Button
 const dom_btn_countdown = document.getElementById('btn_countdown');
-let count_intervalID = null;
+// const dom_counter in settings area
+
+let intervalID = null;
+
 dom_btn_countdown.onclick = function() {
     dom_btn_countdown.innerHTML = 'Restart';
-    if (count_intervalID) {
-        window.clearInterval(count_intervalID);
-        count_intervalID = null;
+
+    if (intervalID) { // Restart
+        window.clearInterval(intervalID);
+        intervalID = null;
     }
-    let remaining = parseInt(cfg.time);
-    function update() {
-        --remaining;
-        if (remaining == -1) {
-            notify();
-        }
-        dom_counter.innerHTML = s2mmss(remaining);
-    }
-    update();
-    count_intervalID = window.setInterval(update, 1000);
+    intervalID = countdown(parseInt(cfg.time), dom_counter);
 }
+

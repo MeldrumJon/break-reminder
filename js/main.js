@@ -147,10 +147,10 @@ dom_btn_test.addEventListener('click', function() {
     test_timer.start();
 });
 
-document.addEventListener('focus', function() {
+window.addEventListener('focus', function() {
     timer.action(cfg.auto.focus);
 });
-document.addEventListener('blur', function() {
+window.addEventListener('blur', function() {
     timer.action(cfg.auto.blur);
 });
 

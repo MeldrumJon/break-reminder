@@ -8,48 +8,106 @@
 
 	<body id="reminder">
 		<div id="countdown">
-			<div id="control">
-				<span id="counter"></span>
-				<div>
-				<a href="#" id="cfg_open">Settings</a>
-				<button type="button" id="btn_countdown">Start</button> 
+			<div>
+				<div id="counter"></div>
+				<div id="control">
+					<button type="button" title="Settings" id="cfg_open">
+						<img src="img/gear.svg" alt="Settings">
+					</button><!--
+					--><button type="button" title="Start" id="btn_start">
+						<img src="img/play.svg" alt="Start">
+					</button><!--
+					--><button type="button" title="Pause" id="btn_pause">
+						<img src="img/pause.svg" alt="Pause">
+					</button><!--
+					--><button type="button" title="Stop" id="btn_stop">
+						<img src="img/stop.svg" alt="Stop">
+					</button> 
 				</div>
-			</div>
-			<div id="user">
-				User content.
+				<div id="user">
+					User content.
+				</div>
 			</div>
 		</div>
 		<div id="shade">
+			<div>
 			<form id="cfg">
-				<a href="#" id="cfg_close">Close</a>
 				<fieldset>
-					<legend>Countdown</legend>
-					<label for="cfg_time">Countdown length (seconds): </label>
-					<input type="text" id="cfg_time"
-								   	minlength="1" maxlength="5" size="3" value="3600"
-																			pattern="[0-9]+">
-					<br/>
-					<textarea id="cfg_user">Click the settings icon to change this.</textarea>
+					<legend>Timer Settings</legend>
+					<div>
+						<label for="cfg_time">Countdown length (seconds): </label>
+						<input type="text" id="cfg_time"
+								   		minlength="1" maxlength="5" size="3" value="3600"
+																				pattern="[0-9]+">
+					</div>
+				</fieldset>
+				<fieldset id="cfg_auto">
+					<div>
+						<label for="cfg_load">
+							<input type="checkbox" id="cfg_load" name="cfg_load">
+							Start timer on page load.
+						</label>
+					</div>
+					<div>
+						<label for="cfg_focus">Action to take on page focus:</label>
+						<select name="cfg_focus" id="cfg_focus">
+							<option value="none">No Action</option>
+							<option value="start">Start</option>
+							<option value="pause">Pause</option>
+							<option value="stop">Stop</option>
+							<option value="restart">Restart</option>
+							<option value="restart_timeup">Restart if Time's Up</option>
+						</select>
+					</div>
+					<div>
+						<label for="cfg_blur">Action to take on page blur:</label>
+						<select name="cfg_blur" id="cfg_blur">
+							<option value="none">No Action</option>
+							<option value="start">Start</option>
+							<option value="pause">Pause</option>
+							<option value="stop">Stop</option>
+							<option value="restart">Restart</option>
+							<option value="restart_timeup">Restart if Time's Up</option>
+						</select>
+					</div>
+					<div>
+						<label for="cfg_naction">Action to take on notification click:</label>
+						<select name="cfg_naction" id="cfg_naction">
+							<option value="none">No Action</option>
+							<option value="start">Start</option>
+							<option value="pause">Pause</option>
+							<option value="stop">Stop</option>
+							<option value="restart">Restart</option>
+						</select>
+					</div>
+					<div>
+						<label for="cfg_aaction">Action to take on alert acknowledgement:</label>
+						<select name="cfg_aaction" id="cfg_aaction">
+							<option value="none">No Action</option>
+							<option value="start">Start</option>
+							<option value="pause">Pause</option>
+							<option value="stop">Stop</option>
+							<option value="restart">Restart</option>
+						</select>
+					</div>
 				</fieldset>
 				<fieldset>
-					<legend>Alarm</legend>
-					<input type="checkbox" id="cfg_alert" name="cfg_alert">
-					<label for="cfg_alert">Browser Alert</label>
-
-					<input type="checkbox" id="cfg_notification" name="cfg_notification" checked>
-					<label for="cfg_notification">Push Notification</label>
-
-					<input type="checkbox" id="cfg_title" name="cfg_title">
-					<label for="cfg_title">Flash Page Title</label>
-
-					<br/>
+					<legend>Alarms</legend>
 					<div>
 						<label for="cfg_msg">Message: </label>
 						<input type="text" id="cfg_msg" value="Time's up!">
 					</div>
+					<input type="checkbox" id="cfg_alert" name="cfg_alert" checked>
+					<label for="cfg_alert">Browser Alert</label>
+
+					<input type="checkbox" id="cfg_notification" name="cfg_notification">
+					<label for="cfg_notification">Push Notification</label>
+
+					<input type="checkbox" id="cfg_title" name="cfg_title">
+					<label for="cfg_title">Flash Page Title</label>
 				</fieldset>
+				<div class="sublabel">Settings for Push Notifications:</div>
 				<fieldset id="cfg_notifications">
-					<legend>Notifications</legend>
 					<input type="checkbox" id="cfg_ninteract" 
 										name="cfg_ninteract" checked>
 					<label for="cfg_ninteract">Require Interaction</label>
@@ -61,10 +119,22 @@
 					<input type="checkbox" id="cfg_nrenotify" 
 										name="cfg_nrenotify">
 					<label for="cfg_nrenotify">Renotify</label>
+					<div class="buttons">
+						<button type="button" title="Test" id="btn_test">
+							<img src="img/play.svg" alt="Test">
+						</button> <span id="counter_test"></span>
+					</div>
 				</fieldset>
-
-				<button type="button" id="btn_test">Test</button> <span id="counter_test">3</span>
+				<fieldset>
+					<legend>User Content</legend>
+					Additional text/HTML to show below the timer:
+					<textarea rows="5" id="cfg_user"></textarea>
+				</fieldset>
+				<div class="buttons">
+					<button type="button" id="cfg_close">Close</button>
+				</div>
 			</form>
+			</div>
 		</div>
 		<script src="js/main.js" type="module"></script>
 	</body>

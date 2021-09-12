@@ -51,6 +51,9 @@ export default class Config {
                     case "TEXTAREA":
                         cfg_obj[ch_key] = ch.value;
                         break;
+                    case "SELECT":
+                        cfg_obj[ch_key] = ch.value;
+                        break;
                     case "FIELDSET":
                         if (ch_key) {
                             cfg_obj[ch_key] = {};
@@ -93,6 +96,8 @@ export default class Config {
                     case "TEXTAREA":
                         ch.value = cfg_obj[ch_key];
                         break;
+                    case "SELECT":
+                        ch.value = cfg_obj[ch_key];
                     case "FIELDSET":
                         if (ch_key) {
                             recurse(ch, cfg_obj[ch_key], prefix);

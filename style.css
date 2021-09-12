@@ -4,32 +4,43 @@
 }
 html { height: 100%; }
 body {
-	height: 100%;
 	position: fixed;
+	height: 100%;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background: #f1f3f4;
-	font-size: 1em;
-	font-family: Arial, sans-serif;
+	background: #1c1f26;
+	color: #fff;
+	font: 1em Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+	line-height: 1;
 }
 button {
-	background-image: linear-gradient(to bottom, #467DAA, #446DA8);
-	border:1px solid #42688b;
-	color: #fff;
-	border-radius: 5px;
-	font-size: 0.9em;
-	font-weight: 700;
-	padding: 0 1em;
-	line-height: 2em;
+	background: none;
+	border: none;
+	color: #c0c5ce;
 }
 button:hover {
 	cursor:pointer;
-	border-color: #6193DA;
+	color: #FEE699;
 }
 button:active {
-	background: #6193DA;
+	color: #ffffff;
+}
+
+button img {
+	vertical-align: middle;
+	height: 3em;
+	/* Filter to #C0C5CD */
+	filter: invert(95%) sepia(3%) saturate(715%) hue-rotate(183deg) brightness(87%) contrast(82%);
+}
+button:hover img {
+	/* Filter to #FEE699 */
+	filter: invert(89%) sepia(23%) saturate(723%) hue-rotate(338deg) brightness(103%) contrast(103%);
+}
+button:active img {
+	/* Filter to #FFFFFF */
+	filter: invert(93%) sepia(100%) saturate(29%) hue-rotate(126deg) brightness(107%) contrast(106%);
 }
 
 #countdown {
@@ -39,27 +50,23 @@ button:active {
 	width:100%;
 	height:100%;
 	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1;
+}
+#countdown > div {
+	padding: 1em;
+}
+
+#counter {
+	font-size: 6em;
+	font-family: Optima,Segoe,"Segoe UI",Candara,Calibri,Arial,sans-serif;
 }
 #control {
-	background: #fff;
-	padding: 1em;
-	border-bottom: 1px solid #dddee2;
+	margin-bottom: 1em;
 }
-#control > div {
-}
-#cfg_open {
-	display:inline-block;
-	vertical-align: middle;
-}
-#counter {
-	display:inline-block;
-	vertical-align: middle;
-	font-family: monospace;
-	font-size: 3em;
-}
-#user {
-	padding: 1em;
-}
+#cfg_open { margin-right: 1em; }
 
 #shade {
 	position: absolute;
@@ -71,22 +78,48 @@ button:active {
 	justify-content: center;
 	align-items: center;
 	z-index: 100;
-	background: #00000033;
+	background: #1c1f2633;
 	/* Hidden normally */
 	visibility: hidden;
 	opacity: 0;
+}
+#shade > div {
+	background: #343d45;
+	padding: 1em;
 }
 body.settings #shade {
 	visibility: visible;
 	opacity: 1;
 }
 
-#cfg {
-	background: #fff;
-	border: 1px solid #dddee2;
-	padding: 1em;
-	border-radius: 15px;
+form {
+	line-height: 1.5;
 }
 fieldset {
-	margin: 1em 0;
+	border: none;
+	min-width: 0;
+	margin-bottom: 1em;
+}
+legend {
+	font-size: 1.1em;
+	line-height: 1;
+	font-weight: 700;
+	margin-bottom: 0.5em;
+}
+div.sublabel {
+	margin-top: 0.5em;
+}
+textarea {
+	display: block;
+	width: 100%;
+}
+div.buttons {
+	text-align: right;
+}
+#counter_test {
+	vertical-align: middle;
+	font-size: 2em;
+}
+#cfg_notifications {
+	margin-bottom: 0;
 }

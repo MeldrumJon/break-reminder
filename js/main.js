@@ -1,16 +1,25 @@
 import Config from './Config.js';
+import SecondsTimer from './SecondsTimer.js';
 import * as noti from './noti.js';
 
 function s2mmss(seconds) {
-    if (seconds < 0) {
-        return '- ' + Math.floor(-seconds/60) + 'm ' + (-seconds % 60) + 's';
-    }
-    return '' + Math.floor(seconds/60) + 'm ' + (seconds % 60) + 's';
+    let neg = (seconds < 0);
+    let min = neg ? Math.floor(-seconds/60) : Math.floor(seconds/60);
+    let sec = neg ? (-seconds % 60) : (seconds % 60);
+
+    let neg_str = neg ? '-' : '';
+    let min_str = '' + min;
+    let sec_str = '' + sec;
+    if (min_str.length<=1) min_str = '0' + min_str;
+    if (sec_str.length<=1) sec_str = '0' + sec_str;
+
+    return neg_str + min_str + ':' + sec_str;
 }
 
 /*
  * Config
  */
+
 const cfg = new Config('cfg', 'cfg_');
 const dom_cfg = document.getElementById('cfg');
 dom_cfg.addEventListener('change', function() {
@@ -18,8 +27,19 @@ dom_cfg.addEventListener('change', function() {
     return false;
 });
 
-// Ask for notification permissions
+console.log(cfg);
+
+// Notification Permissions
 const dom_cfg_notification = document.getElementById('cfg_notification');
+
+if (noti.push_status() === "denied") {
+    dom_cfg_notification.checked = false;
+    dom_cfg_notification.disabled = true;
+}
+else if (noti.push_status() !== "granted") {
+    dom_cfg_notification.checked = false;
+}
+
 dom_cfg_notification.addEventListener('change', function() {
     if (!dom_cfg_notification.checked) {
         return;
@@ -34,32 +54,20 @@ dom_cfg_notification.addEventListener('change', function() {
         }
     });
 });
-if (noti.push_status() === "denied") {
-    dom_cfg_notification.checked = false;
-    dom_cfg_notification.disabled = true;
-}
-else if (noti.push_status() !== "granted") {
-    dom_cfg_notification.checked = false;
-}
 
-// Show countdown length
-const dom_counter = document.getElementById('counter');
+// Update Timer Seconds
 const dom_cfg_time = document.getElementById('cfg_time');
 dom_cfg_time.addEventListener('change', function() {
-    if (!intervalID) { // Countdown not active
-        dom_counter.innerHTML = s2mmss(dom_cfg_time.value);
-    }
+    timer.set_seconds(parseInt(dom_cfg_time.value));
 });
-dom_counter.innerHTML = s2mmss(cfg.time);
 
-// Add user content
+// User Content
 const dom_user = document.getElementById('user');
 const dom_cfg_user = document.getElementById('cfg_user');
 dom_user.innerHTML = dom_cfg_user.value;
 dom_cfg_user.addEventListener('change', function() {
     dom_user.innerHTML = dom_cfg_user.value;
 });
-
 
 /*
  * UI FSM
@@ -78,13 +86,14 @@ if (cfg._init) {
     dom_body.classList.add('settings');
 }
 
-
-
 /* 
  * Countdown
  */
 
-function notify() {
+function notify(tmr) {
+    if (cfg.title) {
+        noti.title(cfg.msg);
+    }
     if (cfg.notification) {
         let notification = noti.push('Reminder', {
             body: cfg.msg,
@@ -94,61 +103,58 @@ function notify() {
         });
         notification.onclick = function() {
             notification.close();
+            tmr.action(cfg.auto.naction);
         }
-    }
-    if (cfg.title) {
-        noti.title(cfg.msg);
     }
     if (cfg.alert) { // Last since it is blocking
         noti.alert(cfg.msg);
+        tmr.action(cfg.auto.aaction);
     }
 }
 
-function countdown(seconds, dom_countdown) {
-    let target = new Date(Date.now() + 1000*seconds);
-    let notified = 0;
+// Normal Countdown
+const dom_counter = document.getElementById('counter');
+const timer = new SecondsTimer(parseInt(cfg.time), function(remainder) {
+    dom_counter.innerHTML = s2mmss(remainder);
+}, function() {
+    notify(timer);
+});
 
-    function update() {
-        let difference = target.getTime() - Date.now();
-        dom_countdown.innerHTML = s2mmss(Math.floor((difference-1)/1000));
-        if (!notified && difference < 0) {
-            notified = 1;
-            notify();
-        }
-    }
-    update();
-    return window.setInterval(update, 1000);
-}
+const dom_btn_start = document.getElementById('btn_start');
+dom_btn_start.addEventListener('click', function() {
+    timer.start();
+});
+const dom_btn_pause = document.getElementById('btn_pause');
+dom_btn_pause.addEventListener('click', function() {
+    timer.pause();
+});
+const dom_btn_stop = document.getElementById('btn_stop');
+dom_btn_stop.addEventListener('click', function() {
+    timer.stop();
+});
 
-// Test Button
-const test_length = 3;
-const dom_btn_test = document.getElementById('btn_test');
+// Test Countdown
 const dom_counter_test = document.getElementById('counter_test');
-dom_counter_test.innerHTML = s2mmss(test_length);
+const test_timer = new SecondsTimer(3, function(remainder) {
+    dom_counter_test.innerHTML = s2mmss(remainder);
+}, function() {
+    test_timer.stop();
+    notify(test_timer);
+    test_timer.stop();
+});
+const dom_btn_test = document.getElementById('btn_test');
+dom_btn_test.addEventListener('click', function() {
+    test_timer.start();
+});
 
-let test_intervalID = null;
+document.addEventListener('focus', function() {
+    timer.action(cfg.auto.focus);
+});
+document.addEventListener('blur', function() {
+    timer.action(cfg.auto.blur);
+});
 
-dom_btn_test.onclick = function() {
-    if (test_intervalID) { // Restart
-        window.clearInterval(test_intervalID);
-        test_intervalID = null;
-    }
-    test_intervalID = countdown(test_length, dom_counter_test);
-}
-
-// Real Button
-const dom_btn_countdown = document.getElementById('btn_countdown');
-// const dom_counter in settings area
-
-let intervalID = null;
-
-dom_btn_countdown.onclick = function() {
-    dom_btn_countdown.innerHTML = 'Restart';
-
-    if (intervalID) { // Restart
-        window.clearInterval(intervalID);
-        intervalID = null;
-    }
-    intervalID = countdown(parseInt(cfg.time), dom_counter);
+if (cfg.auto.load) {
+    timer.start();
 }
 

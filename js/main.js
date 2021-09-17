@@ -148,6 +148,10 @@ const dom_btn_stop = document.getElementById('btn_stop');
 dom_btn_stop.addEventListener('click', function() {
     timer.stop();
 });
+const dom_btn_restart = document.getElementById('btn_restart');
+dom_btn_restart.addEventListener('click', function() {
+    timer.restart();
+});
 
 // Test Countdown
 const dom_counter_test = document.getElementById('counter_test');

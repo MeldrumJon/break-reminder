@@ -90,12 +90,20 @@ if (cfg._init) {
  * Countdown
  */
 
+let notification = null;
+
 function notify(tmr) {
     if (cfg.title) {
         noti.title(cfg.msg);
     }
     if (cfg.notification) {
-        let notification = noti.push('Reminder', {
+        if (notification) {
+            notification.onclick = null;
+            notification.onclose = null;
+            notification.close();
+            notification = null;
+        }
+        notification = noti.push('Reminder', {
             body: cfg.msg,
             requireInteraction: cfg.ninteract,
             silent: cfg.nsilent,
@@ -104,6 +112,11 @@ function notify(tmr) {
         notification.onclick = function() {
             notification.close();
             tmr.action(cfg.auto.naction);
+        }
+        notification.onclose = function() {
+            if (!document.hasFocus()) {
+                tmr.action(cfg.auto.nclose);
+            }
         }
     }
     if (cfg.alert) { // Last since it is blocking

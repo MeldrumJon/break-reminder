@@ -49,8 +49,8 @@
 						</label>
 					</div>
 					<div>
-						<label for="cfg_focus">Action to take on page focus:</label>
-						<select name="cfg_focus" id="cfg_focus">
+						<label for="cfg_onfocus">Action to take on page focus:</label>
+						<select name="cfg_onfocus" id="cfg_onfocus">
 							<option value="none">No Action</option>
 							<option value="start">Start</option>
 							<option value="pause">Pause</option>
@@ -60,8 +60,8 @@
 						</select>
 					</div>
 					<div>
-						<label for="cfg_blur">Action to take on page blur:</label>
-						<select name="cfg_blur" id="cfg_blur">
+						<label for="cfg_onblur">Action to take on page blur:</label>
+						<select name="cfg_onblur" id="cfg_onblur">
 							<option value="none">No Action</option>
 							<option value="start">Start</option>
 							<option value="pause">Pause</option>
@@ -71,8 +71,8 @@
 						</select>
 					</div>
 					<div>
-						<label for="cfg_naction">Action to take on notification click:</label>
-						<select name="cfg_naction" id="cfg_naction">
+						<label for="cfg_noticlick">Action to take on notification click:</label>
+						<select name="cfg_noticlick" id="cfg_noticlick">
 							<option value="none">No Action</option>
 							<option value="start">Start</option>
 							<option value="pause">Pause</option>
@@ -81,8 +81,8 @@
 						</select>
 					</div>
 					<div>
-						<label for="cfg_nclose">Action to take on notification dismiss:</label>
-						<select name="cfg_nclose" id="cfg_nclose">
+						<label for="cfg_noticlose">Action to take on notification dismiss:</label>
+						<select name="cfg_noticlose" id="cfg_noticlose">
 							<option value="none">No Action</option>
 							<option value="start">Start</option>
 							<option value="pause">Pause</option>
@@ -92,8 +92,8 @@
 						</select>
 					</div>
 					<div>
-						<label for="cfg_aaction">Action to take on alert acknowledgement:</label>
-						<select name="cfg_aaction" id="cfg_aaction">
+						<label for="cfg_alertack">Action to take on alert acknowledgement:</label>
+						<select name="cfg_alertack" id="cfg_alertack">
 							<option value="none">No Action</option>
 							<option value="start">Start</option>
 							<option value="pause">Pause</option>
@@ -110,6 +110,9 @@
 					</div>
 					<input type="checkbox" id="cfg_alert" name="cfg_alert" checked>
 					<label for="cfg_alert">Browser Alert</label>
+
+					<input type="checkbox" id="cfg_focus" name="cfg_focus" checked>
+					<label for="cfg_focus">Page Focus</label>
 
 					<input type="checkbox" id="cfg_notification" name="cfg_notification">
 					<label for="cfg_notification">Push Notification</label>

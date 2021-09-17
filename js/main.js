@@ -111,17 +111,20 @@ function notify(tmr) {
         });
         notification.onclick = function() {
             notification.close();
-            tmr.action(cfg.auto.naction);
+            tmr.action(cfg.auto.noticlick);
         }
         notification.onclose = function() {
             if (!document.hasFocus()) {
-                tmr.action(cfg.auto.nclose);
+                tmr.action(cfg.auto.noticlose);
             }
         }
     }
+    if (cfg.focus) {
+        window.focus();
+    }
     if (cfg.alert) { // Last since it is blocking
         noti.alert(cfg.msg);
-        tmr.action(cfg.auto.aaction);
+        tmr.action(cfg.auto.alertack);
     }
 }
 
@@ -161,10 +164,10 @@ dom_btn_test.addEventListener('click', function() {
 });
 
 window.addEventListener('focus', function() {
-    timer.action(cfg.auto.focus);
+    timer.action(cfg.auto.onfocus);
 });
 window.addEventListener('blur', function() {
-    timer.action(cfg.auto.blur);
+    timer.action(cfg.auto.onblur);
 });
 
 if (cfg.auto.load) {

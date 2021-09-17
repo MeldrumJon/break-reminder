@@ -110,6 +110,7 @@ function notify(tmr) {
             renotify: cfg.nrenotify
         });
         notification.onclick = function() {
+            notification.onclose = null;
             notification.close();
             tmr.action(cfg.auto.noticlick);
         }

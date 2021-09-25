@@ -27,8 +27,6 @@ dom_cfg.addEventListener('change', function() {
     return false;
 });
 
-console.log(cfg);
-
 // Notification Permissions
 const dom_cfg_notification = document.getElementById('cfg_notification');
 
@@ -62,11 +60,23 @@ dom_cfg_time.addEventListener('change', function() {
 });
 
 // User Content
+
+const setInnerHTML = function(elm, html) { // Allow user-provided scripts.
+  elm.innerHTML = html;
+  Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
+    const newScript = document.createElement("script");
+    Array.from(oldScript.attributes)
+      .forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}
+
 const dom_user = document.getElementById('user');
 const dom_cfg_user = document.getElementById('cfg_user');
-dom_user.innerHTML = dom_cfg_user.value;
+setInnerHTML(dom_user, dom_cfg_user.value);
 dom_cfg_user.addEventListener('change', function() {
-    dom_user.innerHTML = dom_cfg_user.value;
+    setInnerHTML(dom_user, dom_cfg_user.value);
 });
 
 /*

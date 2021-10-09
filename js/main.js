@@ -102,17 +102,20 @@ if (cfg._init) {
 
 let notification = null;
 
+function notify_hide() {
+    if (notification) {
+        notification.onclick = null;
+        notification.onclose = null;
+        notification.close();
+        notification = null;
+    }
+}
 function notify(tmr) {
     if (cfg.title) {
         noti.title(cfg.msg);
     }
     if (cfg.notification) {
-        if (notification) {
-            notification.onclick = null;
-            notification.onclose = null;
-            notification.close();
-            notification = null;
-        }
+        notify_hide();
         notification = noti.push('Reminder', {
             body: cfg.msg,
             requireInteraction: cfg.ninteract,
@@ -158,10 +161,12 @@ dom_btn_pause.addEventListener('click', function() {
 const dom_btn_stop = document.getElementById('btn_stop');
 dom_btn_stop.addEventListener('click', function() {
     timer.stop();
+    if (!timer.timeup()) { notify_hide(); }
 });
 const dom_btn_restart = document.getElementById('btn_restart');
 dom_btn_restart.addEventListener('click', function() {
     timer.restart();
+    if (!timer.timeup()) { notify_hide(); }
 });
 
 // Test Countdown
@@ -180,9 +185,11 @@ dom_btn_test.addEventListener('click', function() {
 
 window.addEventListener('focus', function() {
     timer.action(cfg.auto.onfocus);
+    if (!timer.timeup()) { notify_hide(); }
 });
 window.addEventListener('blur', function() {
     timer.action(cfg.auto.onblur);
+    if (!timer.timeup()) { notify_hide(); }
 });
 
 if (cfg.auto.load) {

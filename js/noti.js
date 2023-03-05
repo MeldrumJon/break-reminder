@@ -32,36 +32,21 @@ export function alert(msg) {
  */
 
 export function push_ask_permission(callback) {
-    function checkNotificationPromise() {
-        try {
-            Notification.requestPermission().then();
-        } catch {
-            return false;
-        }
-        return true;
-    }
-
-    function handlePermission(permission) {
-        if(!('permission' in Notification)) {
-            Notification.permission = permission;
-        }
-        callback(permission);
+    if (Notification.permission === 'granted') { 
+        callback(Notification.permission);
+        return;
     }
 
     // Let's check if the browser supports notifications
     if (!"Notification" in window) {
         console.log("This browser does not support notifications.");
     } else {
-        if (checkNotificationPromise()) {
-            Notification.requestPermission()
-            .then(function (permission) {
-                handlePermission(permission);
-            })
-        } else {
-            Notification.requestPermission(function(permission) {
-                handlePermission(permission);
-            });
-        }
+        Notification.requestPermission().then(function (permission) {
+            if (!('permission' in Notification)) {
+                Notification.permission = permission;
+            }
+            callback(permission);
+        });
     }
 }
 

@@ -123,3 +123,11 @@ div.buttons {
 #cfg_notifications {
 	margin-bottom: 0;
 }
+
+body.light {
+	background: #fffffe;
+	color: #000;
+}
+body.light #shade > div {
+	background: #fcfcfb;
+}

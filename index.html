@@ -39,9 +39,7 @@
 					<legend>Timer Settings</legend>
 					<div>
 						<label for="cfg_time">Countdown length (seconds): </label>
-						<input type="text" id="cfg_time"
-								   		minlength="1" maxlength="5" size="3" value="3600"
-																				pattern="[0-9]+">
+						<input type="text" id="cfg_time" minlength="1" maxlength="5" size="3" value="3600" pattern="[0-9]+">
 					</div>
 				</fieldset>
 				<fieldset id="cfg_auto">
@@ -120,22 +118,25 @@
 					<input type="checkbox" id="cfg_notification" name="cfg_notification">
 					<label for="cfg_notification">Push Notification</label>
 
+					<br/>
+
 					<input type="checkbox" id="cfg_title" name="cfg_title">
 					<label for="cfg_title">Flash Page Title</label>
+
+					<input type="checkbox" id="cfg_colors" name="cfg_colors">
+					<label for="cfg_colors">Flash Page Background</label>
 				</fieldset>
 				<div class="sublabel">Settings for Push Notifications:</div>
 				<fieldset id="cfg_notifications">
-					<input type="checkbox" id="cfg_ninteract" 
-										name="cfg_ninteract" checked>
+					<input type="checkbox" id="cfg_ninteract" name="cfg_ninteract" checked>
 					<label for="cfg_ninteract">Require Interaction</label>
 
-					<input type="checkbox" id="cfg_nsilent" 
-										name="cfg_nsilent">
+					<input type="checkbox" id="cfg_nsilent" name="cfg_nsilent">
 					<label for="cfg_nsilent">Silent</label>
 
-					<input type="checkbox" id="cfg_nrenotify" 
-										name="cfg_nrenotify">
+					<input type="checkbox" id="cfg_nrenotify" name="cfg_nrenotify">
 					<label for="cfg_nrenotify">Renotify</label>
+
 					<div class="buttons">
 						<button type="button" title="Test" id="btn_test">
 							<img src="img/play.svg" alt="Test">

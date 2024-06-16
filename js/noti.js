@@ -20,6 +20,30 @@ export function title(msg) {
 }
 
 /*
+ * Page Class
+ */
+
+export function page_class(c) {
+    if (document.hasFocus()) { return; }
+    let toggle = function() {
+        if (document.body.classList.contains(c)) {
+            document.body.classList.remove(c);
+        }
+        else {
+            document.body.classList.add(c);
+        }
+    }
+    let interval_id = window.setInterval(toggle, 2000);
+
+    let clear = function() {
+        window.removeEventListener('focus', clear);
+        window.clearInterval(interval_id);
+        document.body.classList.remove(c);
+    }
+    window.addEventListener('focus', clear);
+}
+
+/*
  * Window Alert
  */
 

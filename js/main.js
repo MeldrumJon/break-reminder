@@ -136,6 +136,9 @@ function notify(tmr) {
     if (cfg.focus) {
         window.focus();
     }
+    if (cfg.colors) {
+        noti.page_class('light');
+    }
     if (cfg.alert) { // Last since it is blocking
         noti.alert(cfg.msg);
         tmr.action(cfg.auto.alertack);

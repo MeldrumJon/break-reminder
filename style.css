@@ -87,6 +87,8 @@ body.nouser #countdown { align-items: center; }
 #shade > div {
 	background: #343d45;
 	padding: 1em;
+	max-height: 100%;
+	overflow-y: scroll;
 }
 body.settings #shade {
 	visibility: visible;

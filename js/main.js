@@ -53,11 +53,28 @@ dom_cfg_notification.addEventListener('change', function() {
     });
 });
 
+let parseTime = function(amount, units) {
+    switch (units) {
+        case 'days':
+            amount = 24*amount;
+        case 'hours':
+            amount = 60*amount;
+        case 'minutes':
+            amount = 60*amount;
+        case 'seconds':
+            amount = amount;
+    }
+    return amount;
+}
+
 // Update Timer Seconds
 const dom_cfg_time = document.getElementById('cfg_time');
-dom_cfg_time.addEventListener('change', function() {
-    timer.set_seconds(parseInt(dom_cfg_time.value));
-});
+const dom_cfg_units = document.getElementById('cfg_units');
+function onTimeChange() {
+    timer.set_seconds(parseTime(dom_cfg_time.value, dom_cfg_units.value));
+}
+dom_cfg_time.addEventListener('change', onTimeChange);
+dom_cfg_units.addEventListener('change', onTimeChange);
 
 // User Content
 
@@ -110,7 +127,7 @@ if (cfg._init) {
  */
 
 const dom_counter = document.getElementById('counter');
-const timer = new SecondsTimer(parseInt(cfg.time), time_update, time_up);
+const timer = new SecondsTimer(parseTime(cfg.time, cfg.units), time_update, time_up);
 
 noti.push_setup('Reminder', {
     body: cfg.msg,
@@ -146,7 +163,6 @@ function time_update(remainder) {
         document.body.classList.add('stopped');
     }
 
-    console.log(cfg)
     if (cfg.remaining || this.timeup() || this.paused() || this.stopped()) {
         dom_counter.innerHTML = s2mmss(remainder);
     }

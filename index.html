@@ -36,8 +36,14 @@
 				<fieldset>
 					<legend>Timer Settings</legend>
 					<div>
-						<label for="cfg_time">Countdown length (seconds): </label>
-						<input type="text" id="cfg_time" minlength="1" maxlength="5" size="3" value="3600" pattern="[0-9]+">
+						<label for="cfg_time">Countdown length: </label>
+						<input type="text" id="cfg_time" minlength="1" maxlength="5" size="3" value="20" pattern="[0-9]+">
+						<select name="cfg_units" id="cfg_units">
+							<option value="seconds">Seconds</option>
+							<option value="minutes" selected>Minutes</option>
+							<option value="hours">Hours</option>
+							<option value="days">Days</option>
+						</select>
 						<br/>
 						<input type="checkbox" id="cfg_remaining" name="cfg_remaining" checked>
 						<label for="cfg_remaining">Show Time Remaining</label>
@@ -106,10 +112,6 @@
 				</fieldset>
 				<fieldset>
 					<legend>Alarms</legend>
-					<div>
-						<label for="cfg_msg">Message: </label>
-						<input type="text" id="cfg_msg" value="Time's up!">
-					</div>
 					<input type="checkbox" id="cfg_alert" name="cfg_alert" checked>
 					<label for="cfg_alert">Browser Alert</label>
 
@@ -126,9 +128,22 @@
 
 					<input type="checkbox" id="cfg_colors" name="cfg_colors">
 					<label for="cfg_colors">Flash Background Color</label>
+
+					<div>
+						<label for="cfg_msg">Message: </label>
+						<input type="text" id="cfg_msg" value="Time's up!">
+					</div>
 				</fieldset>
-				<div class="sublabel">Settings for Push Notifications:</div>
 				<fieldset id="cfg_notifications">
+					<legend>Push Notifications</legend>
+
+					<input type="checkbox" id="cfg_nrepeat" name="cfg_nrepeat">
+					<label for="cfg_nrepeat">Repeatedly Notify</label>
+
+					<br/>
+
+					Properties:
+
 					<input type="checkbox" id="cfg_ninteract" name="cfg_ninteract" checked>
 					<label for="cfg_ninteract">Require Interaction</label>
 
@@ -138,10 +153,6 @@
 					<input type="checkbox" id="cfg_nrenotify" name="cfg_nrenotify">
 					<label for="cfg_nrenotify">Renotify</label>
 
-					<br/>
-
-					<input type="checkbox" id="cfg_nrepeat" name="cfg_nrepeat">
-					<label for="cfg_nrepeat">Repeatedly Notify</label>
 
 				</fieldset>
 				<fieldset>

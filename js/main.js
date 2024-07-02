@@ -109,6 +109,9 @@ if (cfg._init) {
  * Countdown
  */
 
+const dom_counter = document.getElementById('counter');
+const timer = new SecondsTimer(parseInt(cfg.time), time_update, time_up);
+
 noti.push_setup('Reminder', {
     body: cfg.msg,
     requireInteraction: cfg.notifications.ninteract,
@@ -123,7 +126,33 @@ noti.push_setup('Reminder', {
 });
 
 function time_update(remainder) {
-    dom_counter.innerHTML = s2mmss(remainder);
+
+    document.body.classList.remove('running');
+    document.body.classList.remove('paused');
+    document.body.classList.remove('stopped');
+    document.body.classList.remove('timeup');
+
+    // this == timer
+    if (this.timeup()) {
+        document.body.classList.add('timeup');
+    }
+    else if (this.running()) {
+        document.body.classList.add('running');
+    }
+    if (this.paused()) {
+        document.body.classList.add('paused');
+    }
+    if (this.stopped()) {
+        document.body.classList.add('stopped');
+    }
+
+    console.log(cfg)
+    if (cfg.remaining || this.timeup() || this.paused() || this.stopped()) {
+        dom_counter.innerHTML = s2mmss(remainder);
+    }
+    else {
+        dom_counter.innerHTML = '&middot;&middot;&middot;';
+    }
 
     if (remainder < 0) {
         if (document.hasFocus()) { return; }
@@ -139,6 +168,7 @@ function time_update(remainder) {
         }
     }
 }
+
 function time_up() {
     if (cfg.notification) {
         noti.push_push();
@@ -148,12 +178,10 @@ function time_up() {
     }
     if (cfg.alert) { // Last since it is blocking
         noti.alert(cfg.msg);
-        timer.action(cfg.auto.alertack);
+        // this == timer
+        this.action(cfg.auto.alertack);
     }
 }
-
-const dom_counter = document.getElementById('counter');
-const timer = new SecondsTimer(parseInt(cfg.time), time_update, time_up);
 
 const dom_btn_start = document.getElementById('btn_start');
 dom_btn_start.addEventListener('click', function() {

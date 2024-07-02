@@ -12,9 +12,9 @@ export default class SecondsTimer {
         this.cb_timeup  = cb_timeup;
 
         this.remainder  = seconds;
-        if (this.cb_update) { this.cb_update(this.remainder); }
         this.target     = null
         this.intervalID = null;
+        if (this.cb_update) { this.cb_update(this.remainder); }
     }
 
     _update() {
@@ -63,14 +63,15 @@ export default class SecondsTimer {
     start() {
         if (!this.running()) {
             this.target = new Date(Date.now() + 1000*this.remainder);
-            this._update();
             this.intervalID = window.setInterval(this._update.bind(this), 1000);
+            this._update();
         }
     }
 
     pause() {
         window.clearInterval(this.intervalID);
         this.intervalID = null;
+        if (this.cb_update) { this.cb_update(this.remainder); }
     }
 
     stop() {

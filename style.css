@@ -121,9 +121,6 @@ div.buttons {
 	vertical-align: middle;
 	font-size: 2em;
 }
-#cfg_notifications {
-	margin-bottom: 0;
-}
 
 body.noti {
 	background: #fffffe;
@@ -132,3 +129,4 @@ body.noti {
 body.noti #shade > div {
 	background: #fcfcfb;
 }
+

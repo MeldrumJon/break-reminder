@@ -102,7 +102,6 @@ const setUserContent = function() {
     }
 }
 setUserContent();
-setInnerHTML(dom_user, dom_cfg_user.value);
 dom_cfg_user.addEventListener('change', setUserContent);
 
 /*

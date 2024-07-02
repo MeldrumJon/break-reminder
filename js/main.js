@@ -74,10 +74,19 @@ const setInnerHTML = function(elm, html) { // Allow user-provided scripts.
 
 const dom_user = document.getElementById('user');
 const dom_cfg_user = document.getElementById('cfg_user');
-setInnerHTML(dom_user, dom_cfg_user.value);
-dom_cfg_user.addEventListener('change', function() {
+const setUserContent = function() {
     setInnerHTML(dom_user, dom_cfg_user.value);
-});
+    document.body.classList.remove('user', 'nouser');
+    if (dom_cfg_user.value !== '') {
+        document.body.classList.add('user');
+    }
+    else {
+        document.body.classList.add('nouser');
+    }
+}
+setUserContent();
+setInnerHTML(dom_user, dom_cfg_user.value);
+dom_cfg_user.addEventListener('change', setUserContent);
 
 /*
  * UI FSM
@@ -100,58 +109,51 @@ if (cfg._init) {
  * Countdown
  */
 
-let notification = null;
+noti.push_setup('Reminder', {
+    body: cfg.msg,
+    requireInteraction: cfg.notifications.ninteract,
+    silent: cfg.notifications.nsilent,
+    renotify: cfg.notifications.nrenotify
+}, function cb_onclick() {
+    timer.action(cfg.auto.noticlick);
+}, function cb_onclose() {
+    if (!document.hasFocus()) {
+        timer.action(cfg.auto.noticlose);
+    }
+});
 
-function notify_hide() {
-    if (notification) {
-        notification.onclick = null;
-        notification.onclose = null;
-        notification.close();
-        notification = null;
+function time_update(remainder) {
+    dom_counter.innerHTML = s2mmss(remainder);
+
+    if (remainder < 0) {
+        if (document.hasFocus()) { return; }
+        if (remainder % 2 === 0) { return; }
+        if (cfg.title) {
+            noti.toggle_title(cfg.msg);
+        }
+        if (cfg.colors) {
+            noti.toggle_class();
+        }
+        if (cfg.notifications.nrepeat) {
+            noti.toggle_push();
+        }
     }
 }
-function notify(tmr) {
-    if (cfg.title) {
-        noti.title(cfg.msg);
-    }
+function time_up() {
     if (cfg.notification) {
-        notify_hide();
-        notification = noti.push('Reminder', {
-            body: cfg.msg,
-            requireInteraction: cfg.ninteract,
-            silent: cfg.nsilent,
-            renotify: cfg.nrenotify
-        });
-        notification.onclick = function() {
-            notification.onclose = null;
-            notification.close();
-            tmr.action(cfg.auto.noticlick);
-        }
-        notification.onclose = function() {
-            if (!document.hasFocus()) {
-                tmr.action(cfg.auto.noticlose);
-            }
-        }
+        noti.push_push();
     }
     if (cfg.focus) {
-        window.focus();
-    }
-    if (cfg.colors) {
-        noti.page_class('light');
+        noti.focus();
     }
     if (cfg.alert) { // Last since it is blocking
         noti.alert(cfg.msg);
-        tmr.action(cfg.auto.alertack);
+        timer.action(cfg.auto.alertack);
     }
 }
 
-// Normal Countdown
 const dom_counter = document.getElementById('counter');
-const timer = new SecondsTimer(parseInt(cfg.time), function(remainder) {
-    dom_counter.innerHTML = s2mmss(remainder);
-}, function() {
-    notify(timer);
-});
+const timer = new SecondsTimer(parseInt(cfg.time), time_update, time_up);
 
 const dom_btn_start = document.getElementById('btn_start');
 dom_btn_start.addEventListener('click', function() {
@@ -164,35 +166,20 @@ dom_btn_pause.addEventListener('click', function() {
 const dom_btn_stop = document.getElementById('btn_stop');
 dom_btn_stop.addEventListener('click', function() {
     timer.stop();
-    if (!timer.timeup()) { notify_hide(); }
+    if (!timer.timeup()) { noti.clear(); }
 });
 const dom_btn_restart = document.getElementById('btn_restart');
 dom_btn_restart.addEventListener('click', function() {
     timer.restart();
-    if (!timer.timeup()) { notify_hide(); }
-});
-
-// Test Countdown
-const dom_counter_test = document.getElementById('counter_test');
-const test_timer = new SecondsTimer(3, function(remainder) {
-    dom_counter_test.innerHTML = s2mmss(remainder);
-}, function() {
-    test_timer.stop();
-    notify(test_timer);
-    test_timer.stop();
-});
-const dom_btn_test = document.getElementById('btn_test');
-dom_btn_test.addEventListener('click', function() {
-    test_timer.start();
+    if (!timer.timeup()) { noti.clear(); }
 });
 
 window.addEventListener('focus', function() {
     timer.action(cfg.auto.onfocus);
-    if (!timer.timeup()) { notify_hide(); }
+    noti.clear();
 });
 window.addEventListener('blur', function() {
     timer.action(cfg.auto.onblur);
-    if (!timer.timeup()) { notify_hide(); }
 });
 
 if (cfg.auto.load) {

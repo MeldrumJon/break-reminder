@@ -9,7 +9,7 @@
 	<body id="reminder">
 		<div id="countdown">
 			<div>
-				<div id="counter"></div>
+				<div id="counter">00:00</div>
 				<div id="control">
 					<button type="button" title="Settings" id="cfg_open">
 						<img src="img/gear.svg" alt="Settings">
@@ -27,9 +27,7 @@
 						<img src="img/rewind.svg" alt="Restart">
 					</button>
 				</div>
-				<div id="user">
-					User content.
-				</div>
+				<div id="user"></div>
 			</div>
 		</div>
 		<div id="shade">
@@ -121,10 +119,10 @@
 					<br/>
 
 					<input type="checkbox" id="cfg_title" name="cfg_title">
-					<label for="cfg_title">Flash Page Title</label>
+					<label for="cfg_title">Toggle Window Title</label>
 
 					<input type="checkbox" id="cfg_colors" name="cfg_colors">
-					<label for="cfg_colors">Flash Page Background</label>
+					<label for="cfg_colors">Flash Background Color</label>
 				</fieldset>
 				<div class="sublabel">Settings for Push Notifications:</div>
 				<fieldset id="cfg_notifications">
@@ -137,11 +135,11 @@
 					<input type="checkbox" id="cfg_nrenotify" name="cfg_nrenotify">
 					<label for="cfg_nrenotify">Renotify</label>
 
-					<div class="buttons">
-						<button type="button" title="Test" id="btn_test">
-							<img src="img/play.svg" alt="Test">
-						</button> <span id="counter_test"></span>
-					</div>
+					<br/>
+
+					<input type="checkbox" id="cfg_nrepeat" name="cfg_nrepeat">
+					<label for="cfg_nrepeat">Repeatedly Notify</label>
+
 				</fieldset>
 				<fieldset>
 					<legend>User Content</legend>
@@ -149,7 +147,7 @@
 					<textarea rows="5" id="cfg_user"></textarea>
 				</fieldset>
 				<div class="buttons">
-					<button type="button" id="cfg_close">Close</button>
+					<button type="button" id="cfg_close">Save</button>
 				</div>
 			</form>
 			</div>

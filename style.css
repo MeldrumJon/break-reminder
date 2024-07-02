@@ -52,9 +52,10 @@ button:active img {
 	text-align: center;
 	display: flex;
 	justify-content: center;
-	align-items: center;
 	z-index: 1;
 }
+body.user #countdown { align-items: top; }
+body.nouser #countdown { align-items: center; }
 #countdown > div {
 	padding: 1em;
 }
@@ -124,10 +125,10 @@ div.buttons {
 	margin-bottom: 0;
 }
 
-body.light {
+body.noti {
 	background: #fffffe;
 	color: #000;
 }
-body.light #shade > div {
+body.noti #shade > div {
 	background: #fcfcfb;
 }

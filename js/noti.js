@@ -1,46 +1,34 @@
 /*
- * Page Title
+ * Toggle Title
  */
 
-let page_title = document.title;
+const noti_class = 'noti';
+const page_title = document.title;
 
-export function title(msg) {
-    if (document.hasFocus()) { return; }
-    let toggle = function() {
-        document.title = (document.title === page_title) ? msg : page_title;
-    }
-    let interval_id = window.setInterval(toggle, 1000);
-
-    let clear = function() {
-        window.removeEventListener('focus', clear);
-        window.clearInterval(interval_id);
-        document.title = page_title;
-    }
-    window.addEventListener('focus', clear);
+// If msg == string, toggle that message in the window title
+// if msg == null, revert the message to the last page title
+export function toggle_title(msg) {
+    document.title = 
+        (msg === null) ? page_title :
+        (document.title === page_title) ? msg : 
+        page_title;
 }
 
 /*
- * Page Class
+ * Toggle Class
  */
 
-export function page_class(c) {
-    if (document.hasFocus()) { return; }
-    let toggle = function() {
-        if (document.body.classList.contains(c)) {
-            document.body.classList.remove(c);
-        }
-        else {
-            document.body.classList.add(c);
-        }
+export function toggle_class(stop=false) {
+    if (stop) {
+        document.body.classList.remove('noti');
+        return;
     }
-    let interval_id = window.setInterval(toggle, 2000);
-
-    let clear = function() {
-        window.removeEventListener('focus', clear);
-        window.clearInterval(interval_id);
-        document.body.classList.remove(c);
+    if (document.body.classList.contains('noti')) {
+        document.body.classList.remove('noti');
     }
-    window.addEventListener('focus', clear);
+    else {
+        document.body.classList.add('noti');
+    }
 }
 
 /*
@@ -52,8 +40,23 @@ export function alert(msg) {
 }
 
 /*
+ * Window Focus
+ */
+
+export function focus() {
+    window.focus();
+}
+
+/*
  * Push Notifications
  */
+
+let notification = null;
+
+let push_title = null;
+let push_obj = null;
+let push_cb_onclick = null;
+let push_cb_onclose = null;
 
 export function push_ask_permission(callback) {
     if (Notification.permission === 'granted') { 
@@ -81,11 +84,43 @@ export function push_status() {
     return Notification.permission;
 }
 
-/*
- * Wrapper for Notification.constructor
- */
-export function push(title, obj) {
-    return new Notification(title, obj);
+// Wrapper for Notification.constructor
+export function push_setup(title, obj, cb_onclick, cb_onclose) {
+    push_title = title;
+    push_obj = obj;
+    push_cb_onclick = cb_onclick;
+    push_cb_onclose = cb_onclose;
+}
+
+export function push_push() {
+    if (notification !== null) { return; }
+    notification = new Notification(push_title, push_obj);
+    notification.onclick = function() {
+        notification.onclose = null;
+        notification.close();
+        push_cb_onclick();
+    }
+    notification.onclose = function() {
+        push_cb_onclose();
+    }
+}
+
+export function push_unpush() {
+    if (notification) {
+        notification.onclick = null;
+        notification.onclose = null;
+        notification.close();
+        notification = null;
+    }
+}
+
+export function toggle_push() {
+    if (notification) {
+        push_unpush();
+    }
+    else {
+        push_push();
+    }
 }
 
 /*
@@ -97,3 +132,12 @@ export function sound(dom_audio) {
     dom_audio.play();
 }
 
+/*
+ * Clear
+ */
+
+export function clear(c) {
+    toggle_title(null);
+    toggle_class(true);
+    push_unpush();
+}

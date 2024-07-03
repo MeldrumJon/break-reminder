@@ -21,7 +21,9 @@ export default class SecondsTimer {
         let difference = this.target.getTime() - Date.now();
         let last_rem = this.remainder;
         this.remainder = Math.floor((difference-1)/1000);
-        if (this.cb_update) { this.cb_update(this.remainder); }
+        if (last_rem !== this.remainder) {
+            if (this.cb_update) { this.cb_update(this.remainder); }
+        }
         if (last_rem >= 0 && this.remainder < 0) { // Timeup
             if (this.cb_timeup) { this.cb_timeup(); }
         }
@@ -63,7 +65,7 @@ export default class SecondsTimer {
     start() {
         if (!this.running()) {
             this.target = new Date(Date.now() + 1000*this.remainder);
-            this.intervalID = window.setInterval(this._update.bind(this), 1000);
+            this.intervalID = window.setInterval(this._update.bind(this), 100);
             this._update();
         }
     }
@@ -88,6 +90,8 @@ export default class SecondsTimer {
     running() { return (this.intervalID!==null); }
     paused() { return (!this.running() && this.remainder !== this.seconds); }
     stopped() { return (!this.running() && this.remainder === this.seconds); }
+
+    countdown() { return (this.remainder >= 0); }
     timeup() { return (this.remainder < 0); }
 }
 

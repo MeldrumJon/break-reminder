@@ -2,12 +2,12 @@ import Config from './Config.js';
 import SecondsTimer from './SecondsTimer.js';
 import * as noti from './noti.js';
 
-function s2mmss(seconds) {
-    let neg = (seconds < 0);
-    let min = neg ? Math.floor(-seconds/60) : Math.floor(seconds/60);
-    let sec = neg ? (-seconds % 60) : (seconds % 60);
+const s2mmss = function(seconds) {
+    const neg = (seconds < 0);
+    const min = neg ? Math.floor(-seconds/60) : Math.floor(seconds/60);
+    const sec = neg ? (-seconds % 60) : (seconds % 60);
 
-    let neg_str = neg ? '-' : '';
+    const neg_str = neg ? '-' : '';
     let min_str = '' + min;
     let sec_str = '' + sec;
     if (min_str.length<=1) min_str = '0' + min_str;
@@ -21,13 +21,16 @@ function s2mmss(seconds) {
  */
 
 const cfg = new Config('cfg', 'cfg_');
+
 const dom_cfg = document.getElementById('cfg');
+
 dom_cfg.addEventListener('change', function() {
     cfg.save();
     return false;
 });
 
-// Notification Permissions
+/* Notification Permissions */
+
 const dom_cfg_notification = document.getElementById('cfg_notification');
 
 if (noti.push_status() === "denied") {
@@ -53,7 +56,9 @@ dom_cfg_notification.addEventListener('change', function() {
     });
 });
 
-let parseTime = function(amount, units) {
+/* Update Timer/Countdown Seconds */
+
+const parseTime = function(amount, units) {
     switch (units) {
         case 'days':
             amount = 24*amount;
@@ -67,18 +72,20 @@ let parseTime = function(amount, units) {
     return amount;
 }
 
-// Update Timer Seconds
 const dom_cfg_time = document.getElementById('cfg_time');
 const dom_cfg_units = document.getElementById('cfg_units');
-function onTimeChange() {
+
+const onTimeChange = function() {
     timer.set_seconds(parseTime(dom_cfg_time.value, dom_cfg_units.value));
 }
+
 dom_cfg_time.addEventListener('change', onTimeChange);
 dom_cfg_units.addEventListener('change', onTimeChange);
 
-// User Content
+/* User Content */
 
-const setInnerHTML = function(elm, html) { // Allow user-provided scripts.
+// Set elm's inner HTML, allowing user-provided scripts
+const setInnerHTML = function(elm, html) {
   elm.innerHTML = html;
   Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
     const newScript = document.createElement("script");
@@ -91,6 +98,7 @@ const setInnerHTML = function(elm, html) { // Allow user-provided scripts.
 
 const dom_user = document.getElementById('user');
 const dom_cfg_user = document.getElementById('cfg_user');
+
 const setUserContent = function() {
     setInnerHTML(dom_user, dom_cfg_user.value);
     document.body.classList.remove('user', 'nouser');
@@ -101,8 +109,9 @@ const setUserContent = function() {
         document.body.classList.add('nouser');
     }
 }
-setUserContent();
+
 dom_cfg_user.addEventListener('change', setUserContent);
+setUserContent();
 
 /*
  * UI FSM
@@ -110,13 +119,16 @@ dom_cfg_user.addEventListener('change', setUserContent);
 
 const dom_body = document.getElementById('reminder');
 const dom_cfg_open = document.getElementById('cfg_open');
+const dom_cfg_close = document.getElementById('cfg_close');
+
 dom_cfg_open.addEventListener('click', function() {
     dom_body.classList.add('settings');
 });
-const dom_cfg_close = document.getElementById('cfg_close');
+
 dom_cfg_close.addEventListener('click', function() {
     dom_body.classList.remove('settings');
 });
+
 if (cfg._init) {
     dom_body.classList.add('settings');
 }
@@ -126,6 +138,45 @@ if (cfg._init) {
  */
 
 const dom_counter = document.getElementById('counter');
+
+const time_update = function(remainder) {
+    if (cfg.remaining || !this.running() || this.timeup()) {
+        dom_counter.innerHTML = s2mmss(remainder);
+    }
+    else {
+        dom_counter.innerHTML = '&middot;&middot;&middot;';
+    }
+
+    if (this.running() && this.timeup()) {
+        if (cfg.title) {
+            noti.toggle_title(cfg.msg);
+        }
+        if (cfg.colors) {
+            noti.toggle_class(document.hasFocus());
+        }
+        if (cfg.notification && cfg.notifications.nrepeat) {
+            noti.toggle_push();
+        }
+    }
+    else if (!this.running()) {
+        noti.clear();
+    }
+}
+
+const time_up = function() {
+    if (cfg.notification && !cfg.notifications.nrepeat) {
+        noti.push_push();
+    }
+    if (cfg.focus) {
+        noti.focus();
+    }
+    if (cfg.alert) { // Last since it is blocking
+        noti.alert(cfg.msg);
+        // this == timer
+        this.action(cfg.auto.alertack);
+    }
+}
+
 const timer = new SecondsTimer(parseTime(cfg.time, cfg.units), time_update, time_up);
 
 noti.push_setup('Reminder', {
@@ -141,85 +192,18 @@ noti.push_setup('Reminder', {
     }
 });
 
-function time_update(remainder) {
-
-    document.body.classList.remove('running');
-    document.body.classList.remove('paused');
-    document.body.classList.remove('stopped');
-    document.body.classList.remove('timeup');
-
-    // this == timer
-    if (this.timeup()) {
-        document.body.classList.add('timeup');
-    }
-    else if (this.running()) {
-        document.body.classList.add('running');
-    }
-    if (this.paused()) {
-        document.body.classList.add('paused');
-    }
-    if (this.stopped()) {
-        document.body.classList.add('stopped');
-    }
-
-    if (cfg.remaining || this.timeup() || this.paused() || this.stopped()) {
-        dom_counter.innerHTML = s2mmss(remainder);
-    }
-    else {
-        dom_counter.innerHTML = '&middot;&middot;&middot;';
-    }
-
-    if (remainder < 0) {
-        if (document.hasFocus()) { return; }
-        if (remainder % 2 === 0) { return; }
-        if (cfg.title) {
-            noti.toggle_title(cfg.msg);
-        }
-        if (cfg.colors) {
-            noti.toggle_class();
-        }
-        if (cfg.notifications.nrepeat) {
-            noti.toggle_push();
-        }
-    }
-}
-
-function time_up() {
-    if (cfg.notification) {
-        noti.push_push();
-    }
-    if (cfg.focus) {
-        noti.focus();
-    }
-    if (cfg.alert) { // Last since it is blocking
-        noti.alert(cfg.msg);
-        // this == timer
-        this.action(cfg.auto.alertack);
-    }
-}
-
 const dom_btn_start = document.getElementById('btn_start');
-dom_btn_start.addEventListener('click', function() {
-    timer.start();
-});
 const dom_btn_pause = document.getElementById('btn_pause');
-dom_btn_pause.addEventListener('click', function() {
-    timer.pause();
-});
 const dom_btn_stop = document.getElementById('btn_stop');
-dom_btn_stop.addEventListener('click', function() {
-    timer.stop();
-    if (!timer.timeup()) { noti.clear(); }
-});
 const dom_btn_restart = document.getElementById('btn_restart');
-dom_btn_restart.addEventListener('click', function() {
-    timer.restart();
-    if (!timer.timeup()) { noti.clear(); }
-});
+dom_btn_start.addEventListener('click', function() { timer.start(); });
+dom_btn_pause.addEventListener('click', function() { timer.pause(); });
+dom_btn_stop.addEventListener('click', function() { timer.stop(); });
+dom_btn_restart.addEventListener('click', function() { timer.restart(); });
 
 window.addEventListener('focus', function() {
     timer.action(cfg.auto.onfocus);
-    noti.clear();
+    noti.toggle_class(true);
 });
 window.addEventListener('blur', function() {
     timer.action(cfg.auto.onblur);

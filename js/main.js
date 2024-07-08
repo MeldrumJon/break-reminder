@@ -155,7 +155,18 @@ const time_update = function(remainder) {
             noti.toggle_class(document.hasFocus());
         }
         if (cfg.notification && cfg.notifications.nrepeat) {
-            noti.toggle_push();
+            noti.toggle_push('Reminder', {
+                body: cfg.msg,
+                requireInteraction: cfg.notifications.ninteract,
+                silent: cfg.notifications.nsilent,
+                renotify: cfg.notifications.nrenotify
+            }, function cb_onclick() {
+                timer.action(cfg.auto.noticlick);
+            }, function cb_onclose() {
+                if (!document.hasFocus()) {
+                    timer.action(cfg.auto.noticlose);
+                }
+            });
         }
     }
     else if (!this.running()) {
@@ -165,7 +176,18 @@ const time_update = function(remainder) {
 
 const time_up = function() {
     if (cfg.notification && !cfg.notifications.nrepeat) {
-        noti.push_push();
+        noti.push_push('Reminder', {
+            body: cfg.msg,
+            requireInteraction: cfg.notifications.ninteract,
+            silent: cfg.notifications.nsilent,
+            renotify: cfg.notifications.nrenotify
+        }, function cb_onclick() {
+            timer.action(cfg.auto.noticlick);
+        }, function cb_onclose() {
+            if (!document.hasFocus()) {
+                timer.action(cfg.auto.noticlose);
+            }
+        });
     }
     if (cfg.focus) {
         noti.focus();
@@ -178,19 +200,6 @@ const time_up = function() {
 }
 
 const timer = new SecondsTimer(parseTime(cfg.time, cfg.units), time_update, time_up);
-
-noti.push_setup('Reminder', {
-    body: cfg.msg,
-    requireInteraction: cfg.notifications.ninteract,
-    silent: cfg.notifications.nsilent,
-    renotify: cfg.notifications.nrenotify
-}, function cb_onclick() {
-    timer.action(cfg.auto.noticlick);
-}, function cb_onclose() {
-    if (!document.hasFocus()) {
-        timer.action(cfg.auto.noticlose);
-    }
-});
 
 const dom_btn_start = document.getElementById('btn_start');
 const dom_btn_pause = document.getElementById('btn_pause');

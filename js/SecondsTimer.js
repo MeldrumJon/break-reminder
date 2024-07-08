@@ -23,9 +23,9 @@ export default class SecondsTimer {
         this.remainder = Math.floor((difference-1)/1000);
         if (last_rem !== this.remainder) {
             if (this.cb_update) { this.cb_update(this.remainder); }
-        }
-        if (last_rem >= 0 && this.remainder < 0) { // Timeup
-            if (this.cb_timeup) { this.cb_timeup(); }
+            if (last_rem >= 0 && this.remainder < 0) { // Timeup
+                if (this.cb_timeup) { this.cb_timeup(); }
+            }
         }
     }
 
@@ -65,8 +65,8 @@ export default class SecondsTimer {
     start() {
         if (!this.running()) {
             this.target = new Date(Date.now() + 1000*this.remainder);
-            this.intervalID = window.setInterval(this._update.bind(this), 100);
             this._update();
+            this.intervalID = window.setInterval(this._update.bind(this), 1000);
         }
     }
 

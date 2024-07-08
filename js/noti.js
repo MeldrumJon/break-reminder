@@ -51,12 +51,7 @@ export function focus() {
  * Push Notifications
  */
 
-let notification = null;
-
-let push_title = null;
-let push_obj = null;
-let push_cb_onclick = null;
-let push_cb_onclose = null;
+var push_noti = null;
 
 export function push_ask_permission(callback) {
     if (Notification.permission === 'granted') { 
@@ -84,42 +79,35 @@ export function push_status() {
     return Notification.permission;
 }
 
-// Wrapper for Notification.constructor
-export function push_setup(title, obj, cb_onclick, cb_onclose) {
-    push_title = title;
-    push_obj = obj;
-    push_cb_onclick = cb_onclick;
-    push_cb_onclose = cb_onclose;
-}
-
-export function push_push() {
-    if (notification !== null) { return; }
-    notification = new Notification(push_title, push_obj);
-    notification.onclick = function() {
-        notification.onclose = null;
-        notification.close();
-        push_cb_onclick();
+export function push_push(title, obj, cb_onclick, cb_onclose) {
+    push_noti = new Notification(title, obj);
+    push_noti.onclick = function() {
+        push_noti.onclose = null;
+        push_noti.close();
+        cb_onclick();
+        push_noti = null;
     }
-    notification.onclose = function() {
-        push_cb_onclose();
+    push_noti.onclose = function() {
+        cb_onclose();
+        push_noti = null;
     }
 }
 
 export function push_unpush() {
-    if (notification) {
-        notification.onclick = null;
-        notification.onclose = null;
-        notification.close();
-        notification = null;
+    if (push_noti) {
+        push_noti.onclick = null;
+        push_noti.onclose = null;
+        push_noti.close();
+        push_noti = null;
     }
 }
 
-export function toggle_push() {
-    if (notification) {
+export function toggle_push(title, obj, cb_onclick, cb_onclose) {
+    if (push_noti) {
         push_unpush();
     }
     else {
-        push_push();
+        push_push(title, obj, cb_onclick, cb_onclose);
     }
 }
 

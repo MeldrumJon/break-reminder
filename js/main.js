@@ -147,12 +147,15 @@ const time_update = function(remainder) {
         dom_counter.innerHTML = '&middot;&middot;&middot;';
     }
 
-    if (this.running() && this.timeup()) {
+    if (document.hasFocus() || !this.running()) {
+        noti.clear();
+    }
+    else if (this.running() && this.timeup() && (remainder % 2) == 1) {
         if (cfg.title) {
             noti.toggle_title(cfg.msg);
         }
         if (cfg.colors) {
-            noti.toggle_class(document.hasFocus());
+            noti.toggle_class();
         }
         if (cfg.notification && cfg.notifications.nrepeat) {
             noti.toggle_push('Reminder', {
@@ -168,9 +171,6 @@ const time_update = function(remainder) {
                 }
             });
         }
-    }
-    else if (!this.running()) {
-        noti.clear();
     }
 }
 

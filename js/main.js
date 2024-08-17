@@ -150,7 +150,7 @@ const time_update = function(remainder) {
     if (document.hasFocus() || !this.running()) {
         noti.clear();
     }
-    else if (this.running() && this.timeup() && (remainder % 2) == 1) {
+    else if (this.running() && this.timeup() && (remainder % 2) == 0) {
         if (cfg.title) {
             noti.toggle_title(cfg.msg);
         }

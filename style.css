@@ -64,6 +64,9 @@ body.nouser #countdown { align-items: center; }
 	font-size: 6em;
 	font-family: Optima,Segoe,"Segoe UI",Candara,Calibri,Arial,sans-serif;
 }
+#counter:hover {
+	cursor: pointer;
+}
 #control {
 	margin-bottom: 1em;
 }

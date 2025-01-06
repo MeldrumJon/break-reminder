@@ -139,8 +139,13 @@ if (cfg._init) {
 
 const dom_counter = document.getElementById('counter');
 
+let force_show_remaining = false;
+dom_counter.addEventListener('click', function() {
+    force_show_remaining = !force_show_remaining;
+});
+
 const time_update = function(remainder) {
-    if (cfg.remaining || !this.running() || this.timeup()) {
+    if (cfg.remaining || force_show_remaining || !this.running() || this.timeup()) {
         dom_counter.innerHTML = s2mmss(remainder);
     }
     else {
@@ -216,6 +221,7 @@ window.addEventListener('focus', function() {
 });
 window.addEventListener('blur', function() {
     timer.action(cfg.auto.onblur);
+    force_show_remaining = false;
 });
 
 if (cfg.auto.load) {

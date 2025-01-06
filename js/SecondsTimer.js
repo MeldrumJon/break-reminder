@@ -65,8 +65,8 @@ export default class SecondsTimer {
     start() {
         if (!this.running()) {
             this.target = new Date(Date.now() + 1000*this.remainder);
-            this._update();
             this.intervalID = window.setInterval(this._update.bind(this), 1000);
+            this._update();
         }
     }
 
